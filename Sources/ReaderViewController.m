@@ -35,7 +35,11 @@
 #import <MessageUI/MessageUI.h>
 
 @interface ReaderViewController () <UIScrollViewDelegate, UIGestureRecognizerDelegate, MFMailComposeViewControllerDelegate,
-									ReaderMainToolbarDelegate, ReaderMainPagebarDelegate, ReaderContentViewDelegate, ThumbsViewControllerDelegate>
+									ReaderMainToolbarDelegate, ReaderMainPagebarDelegate, ReaderContentViewDelegate, ThumbsViewControllerDelegate,
+                                    UIDocumentInteractionControllerDelegate>
+
+@property (nonatomic, strong) UIDocumentInteractionController *documentInteractionController;
+
 @end
 
 @implementation ReaderViewController
@@ -883,6 +887,19 @@
 	{
 		[mainToolbar setBookmarkState:YES]; [document.bookmarks addIndex:page];
 	}
+}
+
+- (void)tappedInToolbar:(ReaderMainToolbar *)toolbar optionsButton:(UIButton *)button
+{
+    UIDocumentInteractionController *interactionController = [UIDocumentInteractionController interactionControllerWithURL:document.fileURL];
+    interactionController.delegate = self;
+    self.documentInteractionController = interactionController;
+    [interactionController presentOptionsMenuFromRect:[self.view convertRect:button.frame fromView:button.superview] inView:self.view animated:YES];
+}
+
+- (void)documentInteractionControllerDidDismissOptionsMenu:(UIDocumentInteractionController *)controller
+{
+    self.documentInteractionController = nil;
 }
 
 #pragma mark MFMailComposeViewControllerDelegate methods

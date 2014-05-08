@@ -201,6 +201,30 @@
 
 #endif // end of READER_ENABLE_PRINT Option
 
+        
+// Open in ...
+        
+		UIButton *optionsButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        
+		optionsButton.titleLabel.font = [UIFont systemFontOfSize:14.0f];
+        [optionsButton setTitle:NSLocalizedString(@"Open in", @"button") forState:UIControlStateNormal];
+		[optionsButton setTitleColor:[UIColor colorWithWhite:0.0f alpha:1.0f] forState:UIControlStateNormal];
+		[optionsButton setTitleColor:[UIColor colorWithWhite:1.0f alpha:1.0f] forState:UIControlStateHighlighted];
+
+        CGFloat optionsButtonWidth = [optionsButton.titleLabel.text sizeWithFont:optionsButton.titleLabel.font].width + 12; // Extra padding 12px
+		rightButtonX -= (optionsButtonWidth + BUTTON_SPACE);
+		optionsButton.frame = CGRectMake(rightButtonX, BUTTON_Y, optionsButtonWidth, BUTTON_HEIGHT);
+
+		[optionsButton addTarget:self action:@selector(optionsButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+		[optionsButton setBackgroundImage:buttonH forState:UIControlStateHighlighted];
+		[optionsButton setBackgroundImage:buttonN forState:UIControlStateNormal];
+		optionsButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+		optionsButton.exclusiveTouch = YES;
+        
+		[self addSubview:optionsButton]; titleWidth -= (MARK_BUTTON_WIDTH + BUTTON_SPACE);
+        
+// end of Open in
+        
 		if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad)
 		{
 			CGRect titleRect = CGRectMake(titleX, BUTTON_Y, titleWidth, TITLE_HEIGHT);
@@ -326,6 +350,11 @@
 - (void)markButtonTapped:(UIButton *)button
 {
 	[delegate tappedInToolbar:self markButton:button];
+}
+
+- (void)optionsButtonTapped:(UIButton*)button
+{
+    [delegate tappedInToolbar:self optionsButton:button];
 }
 
 @end
