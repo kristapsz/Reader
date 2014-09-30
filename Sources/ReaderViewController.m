@@ -893,18 +893,10 @@
 
 - (void)tappedInToolbar:(ReaderMainToolbar *)toolbar optionsButton:(UIButton *)button
 {
-    // in iOS 8.0 UIDocumentInteractionController takes a lot of time to load. Workaround is to use UIActivityViewController.
-    if ([UIActivityViewController class]){
-        UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:@[document.fileURL] applicationActivities:nil];
-        self.popoverController = [[UIPopoverController alloc] initWithContentViewController:activityController];
-        self.popoverController.delegate = self;
-        [self.popoverController presentPopoverFromRect:button.frame inView:button.superview permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
-    } else {
-        UIDocumentInteractionController *interactionController = [UIDocumentInteractionController interactionControllerWithURL:document.fileURL];
-        interactionController.delegate = self;
-        self.documentInteractionController = interactionController;
-        [interactionController presentOptionsMenuFromRect:[self.view convertRect:button.frame fromView:button.superview] inView:self.view animated:YES];
-    }
+    UIDocumentInteractionController *interactionController = [UIDocumentInteractionController interactionControllerWithURL:document.fileURL];
+    interactionController.delegate = self;
+    self.documentInteractionController = interactionController;
+    [interactionController presentOpenInMenuFromRect:[self.view convertRect:button.frame fromView:button.superview] inView:self.view animated:YES];
 }
 
 - (void)documentInteractionControllerDidDismissOptionsMenu:(UIDocumentInteractionController *)controller
